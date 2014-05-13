@@ -1,0 +1,9 @@
+name: Beacons
+version: 1.3
+main: co.d3s.ylt.beacon.bukkit.BeaconPlugin
+commands:
+    build:
+        permission: beacon.admin.build
+        usage: /<command>
+    beacon:
+        usage: /<command> <beacon id (or just right click to select)> owners [+/-][name] [+/-][name]...
