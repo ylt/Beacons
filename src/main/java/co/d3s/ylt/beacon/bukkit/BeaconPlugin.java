@@ -62,20 +62,34 @@ public class BeaconPlugin extends JavaPlugin {
 
 	public WeakHashMap<Player, AdminExcept> admins = new WeakHashMap<Player, AdminExcept>();
 	public WeakHashMap<Player, Integer> bselection = new WeakHashMap<Player, Integer>();
+	public boolean protectMinecart = false;
+	public boolean protectFrame = true;
+	public boolean protectPaint = true;
+	public Material btool = Material.SLIME_BALL;
 
 	@Override
-	public void onEnable() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://wltd.org/mcosurvival_beacon";
-			BeaconPlugin.db = DriverManager.getConnection(url, "mco",
-					"***password***");
-		} catch (Exception e) {
-			// except e;
-			e.printStackTrace();
-		}
-		beaconplug = this;
-		manager = new BManager(db);
+	public void onEnable() {		
+		saveDefaultConfig();
+	    String user = getConfig().getString("user");
+	    String url = getConfig().getString("url");
+	    String password = getConfig().getString("password");
+	    
+	    this.protectMinecart = getConfig().getBoolean("protectMinecart");
+	    this.protectFrame = getConfig().getBoolean("protectFrame");
+	    this.protectPaint = getConfig().getBoolean("protectPaint");
+	    this.btool = Material.getMaterial(getConfig().getInt("btool")); //TODO swap this later I guess
+	    try
+	    {
+	      Class.forName("com.mysql.jdbc.Driver");
+	      db = DriverManager.getConnection(url, user, 
+	        password);
+	    }
+	    catch (Exception e)
+	    {
+	      e.printStackTrace();
+	    }
+	    beaconplug = this;
+	    manager = new BManager(db);
 
 		// Not used (#P)
 		// World world = getServer().getWorld("world");

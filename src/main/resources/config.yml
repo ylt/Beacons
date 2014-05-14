@@ -1,0 +1,9 @@
+#url is the address to the database, user/pass are just the login to said database, minecart, frame, paint toggles the protection for said block
+#btool is the id of the item used to get the info of the beacon(use an item here)
+user: user
+url: jdbc:mysql://url/database
+password: pass
+protectMinecart: false
+protectFrame: false
+protectPaint: false
+btool: 341
