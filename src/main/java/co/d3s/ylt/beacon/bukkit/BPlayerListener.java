@@ -153,31 +153,20 @@ public class BPlayerListener implements Listener {
 		}
 	}
 		
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if (event.isCancelled())
-			return;
-		Player player = event.getPlayer();
-		Entity entity = event.getRightClicked();
-		Location loc = entity.getLocation();
-		if(entity.getType() == EntityType.HORSE){
-			LivingEntity horse = (LivingEntity) entity;
-			String name = horse.getCustomName();
-		   if(name != null){
-			if(!name.equalsIgnoreCase(player.getName()) && !name.contains("("+player.getName()+")")){
-				//check em
-				beaconplug.checkPlayerEvent(event, player, loc);
-			}
-		   }else{
-			    //well the horse doesn't have a name...
-			    beaconplug.checkPlayerEvent(event, player, loc); 
-		   }
-		}else if(entity.getType() == EntityType.MINECART || entity.getType() == EntityType.BOAT){
-			//do nothing for now
-		}else{
-		    beaconplug.checkPlayerEvent(event, player, loc);
-		}
-	}
+	@EventHandler(priority=EventPriority.HIGHEST)
+	  public void onPlayerInteractEntity(PlayerInteractEntityEvent event){
+	    if (event.isCancelled()) {
+	      return;
+	    }
+	    Player player = event.getPlayer();
+	    Entity entity = event.getRightClicked();
+	    Location loc = entity.getLocation();
+	    if (entity.getType() != EntityType.HORSE) {
+	      if ((entity.getType() != EntityType.MINECART) && (entity.getType() != EntityType.BOAT)) {
+	        this.beaconplug.checkPlayerEvent(event, player, loc);
+	      }
+	    }
+	  }
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamageEntity(EntityDamageByEntityEvent event){//Stop our peaceful friends from dying :)
@@ -274,8 +263,8 @@ public class BPlayerListener implements Listener {
     public void onCreateFrame(HangingPlaceEvent event) {
 		Entity en = event.getPlayer();
 		Hanging hanging = event.getEntity();
-		if(hanging.getType() == EntityType.PAINTING
-		|| hanging.getType() == EntityType.ITEM_FRAME){
+		if((hanging.getType() == EntityType.PAINTING && beaconplug.protectPaint)
+		|| (hanging.getType() == EntityType.ITEM_FRAME && beaconplug.protectFrame)){
 		   if(en instanceof Player){
 			 beaconplug.checkPlayerEvent(event, ((Player) en), en.getLocation());
 			 if (event.isCancelled())
@@ -297,8 +286,8 @@ public class BPlayerListener implements Listener {
 	public void onItemBreak(HangingBreakByEntityEvent event){
 		Entity en = event.getRemover();
 		Hanging hanging = event.getEntity();
-		if(hanging.getType() == EntityType.PAINTING
-		|| hanging.getType() == EntityType.ITEM_FRAME){
+		if((hanging.getType() == EntityType.PAINTING && beaconplug.protectPaint)
+		|| (hanging.getType() == EntityType.ITEM_FRAME && beaconplug.protectFrame)){
 		   if(en instanceof Player){
 			 beaconplug.checkPlayerEvent(event, ((Player) en), en.getLocation());
 			 if (event.isCancelled())
